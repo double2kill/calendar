@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Calendar, Badge, Modal } from 'antd';
+import Form from './Form'
 
 function getListData(value) {
   let listData;
@@ -73,20 +74,29 @@ const Index = () => {
   const showModal = () => setVisible(true)
   const hideModal = () => setVisible(false)
 
+  const FormRef = useRef(null);
+
+  const handleOk = () => {
+    FormRef.current.validateFields((errors, values) => {
+      if(errors) {
+        return
+      }
+      console.log(values)
+    })
+  }
+
   return (
     <div>
       <Calendar dateCellRender={dateCellRender} onSelect={showModal}></Calendar>
       <Modal
           title="编辑"
           visible={visible}
-          onOk={hideModal}
+          onOk={handleOk}
           onCancel={hideModal}
           okText="确认"
           cancelText="取消"
         >
-          <p>Bla bla ...</p>
-          <p>Bla bla ...</p>
-          <p>Bla bla ...</p>
+        <Form ref={FormRef}></Form>
       </Modal>
     </div>
   );
